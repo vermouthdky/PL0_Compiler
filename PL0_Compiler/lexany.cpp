@@ -1,6 +1,6 @@
 #include "lexany.h"
 
-lexany::lexany(std::string s)
+lexany::lexany(QString s)
 {
     this->input = s;
     strptr = 0;
@@ -8,19 +8,19 @@ lexany::lexany(std::string s)
 
 lexany::lexany(){}
 
-std::string lexany::analyze(){
-    std::string output = "";
+QString lexany::analyze(){
+    QString output = "";
     while(getsym()){
-        std::string tk = token;
+        QString tk = token;
         if(symbol == IDSY){
             //std::cout<<ssymbol[symbol]<<" "<<token<<std::endl;
             output.append(" "+tk+" "+ssymbol[symbol]+" "+tk);
         }else if(symbol == DOUBLESY){
             //std::cout<<ssymbol[symbol]<<" "<<dnum<<std::endl;
-            output.append(" "+tk+" "+ssymbol[symbol]+" "+binary(dnum));
+            output.append(" "+tk+" "+ssymbol[symbol]+" "+QString::number(dnum));
         }else if(symbol == INTSY){
             //std::cout<<ssymbol[symbol]<<" "<<num<<std::endl;
-            output.append(" "+tk+" "+ssymbol[symbol]+" "+binary(num));
+            output.append(" "+tk+" "+ssymbol[symbol]+" "+QString::number(num));
         }else if(symbol == NONESY){
             output.append(" "+tk+" "+ssymbol[symbol]+" "+"invalid-string!");
         }else{
@@ -28,6 +28,7 @@ std::string lexany::analyze(){
             output.append(" "+tk+" "+ssymbol[symbol]+" "+"null");
         }
     }
+    //std::cout<<output.toStdString()<<std::endl;
     return output;
 }
 
@@ -187,7 +188,7 @@ bool lexany::Getchar(){
 }
 
 void lexany::ClearToken() {
-    memset(token, 0, sizeof(token));
+    token.clear();
 }
 
 bool lexany::isSpace() {
@@ -203,7 +204,7 @@ bool lexany::isTab() {
 }
 
 bool lexany::isLetter() {
-    if(cur>='a'&&cur<='z' || cur>='A'&&cur<='Z')
+    if((cur>='a'&&cur<='z') || (cur>='A'&&cur<='Z'))
         return true;
     return false;
 }
@@ -263,9 +264,7 @@ bool lexany::isMore(){
 }
 
 bool lexany::CatToken() {
-    char tem[4];
-    tem[0] = cur; tem[1] = '\0';
-    strcat(token, tem);
+    token.append(cur);
     return true;
 }
 
@@ -278,64 +277,31 @@ bool lexany::retract() {
 }
 
 lexany::Symbol lexany::reserver() {
-    if(!strcmp(token, "begin")) return BEGINSY;
-    if(!strcmp(token, "end")) return ENDSY;
-    if(!strcmp(token, "if")) return IFSY;
-    if(!strcmp(token, "then")) return THENSY;
-    if(!strcmp(token, "else")) return ELSESY;
-    if(!strcmp(token, "int")) return INTSY;
-    if(!strcmp(token, "const")) return CONSTSY;
-    if(!strcmp(token, "var")) return VARSY;
-    if(!strcmp(token, "procedure")) return PROCEDURESY;
-    if(!strcmp(token, "odd")) return ODDSY;
-    if(!strcmp(token, "while")) return WHILESY;
-    if(!strcmp(token, "do")) return DOSY;
-    if(!strcmp(token, "call")) return CALLSY;
-    if(!strcmp(token, "repeat")) return REPEATSY;
-    if(!strcmp(token, "until")) return UNTILSY;
-    if(!strcmp(token, "read")) return READSY;
-    if(!strcmp(token, "write")) return WRITESY;
+    if(!token.compare("begin")) return BEGINSY;
+    if(!token.compare("end")) return ENDSY;
+    if(!token.compare("if")) return IFSY;
+    if(!token.compare("then")) return THENSY;
+    if(!token.compare("else")) return ELSESY;
+    if(!token.compare("int")) return INTSY;
+    if(!token.compare("const")) return CONSTSY;
+    if(!token.compare("var")) return VARSY;
+    if(!token.compare("procedure")) return PROCEDURESY;
+    if(!token.compare("odd")) return ODDSY;
+    if(!token.compare("while")) return WHILESY;
+    if(!token.compare("do")) return DOSY;
+    if(!token.compare("call")) return CALLSY;
+    if(!token.compare("repeat")) return REPEATSY;
+    if(!token.compare("until")) return UNTILSY;
+    if(!token.compare("read")) return READSY;
+    if(!token.compare("write")) return WRITESY;
     return NONESY;
 }
 
 void lexany::transNum() {
-    if(strchr(token, '.')!=NULL){
-        dnum = atof(token);
+    if(token.indexOf('.')!=-1){
+        dnum = token.toDouble();
     }else {
-        num = atoi(token);
+        num = token.toInt();
     }
 }
 
-std::string lexany::binary(int num){
-    std::string result = "";
-    while(num!=0){
-        if(num%2) result.append("1");
-        else result.append("0");
-        num /= 2;
-    }
-    if(result == "") result = "0";
-    std::reverse(result.rbegin(), result.rend());
-    return result;
-
-}
-
-std::string lexany::binary(double dnum){
-    std::string result = "";
-    int interger = floor(dnum);
-    double preciser = dnum-interger;
-    result.append(binary(interger)+'.');
-    while(preciser!=0){
-        preciser *= 2;
-        if(preciser>=1){
-            preciser--;
-            result.append("1");
-        }else{
-            result.append("0");
-        }
-    }
-    return result;
-}
-
-void lexany::error(std::string s) {
-    std::cout<<s<<"\n";
-}

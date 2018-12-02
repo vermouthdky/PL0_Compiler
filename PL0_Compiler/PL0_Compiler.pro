@@ -26,10 +26,14 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    lexany.cpp \
+    parser.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    lexany.h \
+    parser.h
 
 FORMS += \
         mainwindow.ui

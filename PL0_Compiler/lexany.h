@@ -3,23 +3,29 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <cstring>
 #include <cstdio>
 #include <cstdlib>
 #include <bitset>
 #include <cmath>
+#include <QMainWindow>
+#include <QFileDialog>
+#include <QIODevice>
+#include <QTextStream>
+#include <QStack>
+#include <utility>
+
 
 class lexany
 {
 public:
-    lexany(std::string);
+    lexany(QString);
     lexany();
 
 private:
     int strptr;
-    std::string input;
-    char cur;
-    char token[100];
+    QString input;
+    QChar cur;
+    QString token;
     int num;
     double dnum;
     enum Symbol {NONESY, BEGINSY, ENDSY, IFSY,
@@ -33,7 +39,7 @@ private:
         LESSSY, MORESY,
         LESSEQUALSY, MOREEQUALSY, NOTEQUALSY} symbol;
 
-    std::string ssymbol[36] = {"none","begin","end","if","then","else","identifer","int","double",
+    QString ssymbol[36] = {"none","begin","end","if","then","else","identifer","int","double",
                              "plus","minus","star","divide","lpar","rpar","comma","semi",
                              "colon","assign","equal","const","var","procedure","odd",
                              "while","do","call","repeat","until","read","write","less","more",
@@ -62,13 +68,11 @@ private:
     bool retract();
     Symbol reserver();
     void transNum();
-    void error(std::string);
+    void error(QString);
     bool getsym();
-    std::string binary(int);
-    std::string binary(double);
 
 public:
-    std::string analyze();
+    QString analyze();
 
 };
 
