@@ -28,12 +28,23 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     lexany.cpp \
-    parser.cpp
+    parser.cpp \
+    symtable.cpp \
+    pcodetable.cpp \
+    perpcode.cpp \
+    token.cpp
 
 HEADERS += \
         mainwindow.h \
     lexany.h \
-    parser.h
+    parser.h \
+    symtable.h \
+    persym.h \
+    pcodetable.h \
+    perpcode.h \
+    pcodeoperator.h \
+    Symbol.h \
+    token.h
 
 FORMS += \
         mainwindow.ui

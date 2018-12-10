@@ -8,24 +8,28 @@ lexany::lexany(QString s)
 
 lexany::lexany(){}
 
-QString lexany::analyze(){
-    QString output = "";
+QList<Token> lexany::analyze(){
+    QList<Token> output;
     while(getsym()){
-        QString tk = token;
-        if(symbol == IDSY){
-            //std::cout<<ssymbol[symbol]<<" "<<token<<std::endl;
-            output.append(" "+tk+" "+ssymbol[symbol]+" "+tk);
-        }else if(symbol == DOUBLESY){
-            //std::cout<<ssymbol[symbol]<<" "<<dnum<<std::endl;
-            output.append(" "+tk+" "+ssymbol[symbol]+" "+QString::number(dnum));
-        }else if(symbol == INTSY){
-            //std::cout<<ssymbol[symbol]<<" "<<num<<std::endl;
-            output.append(" "+tk+" "+ssymbol[symbol]+" "+QString::number(num));
-        }else if(symbol == NONESY){
-            output.append(" "+tk+" "+ssymbol[symbol]+" "+"invalid-string!");
+        if(symbol == Symbol::IDSY){
+            //output.append(" "+tk+" "+ssymbol[symbol]+" "+tk);
+            Token newitem = Token(symbol, linePtr, token);
+            output.append(newitem);
+        }else if(symbol == Symbol::DOUBLESY){
+            //output.append(" "+tk+" "+ssymbol[symbol]+" "+QString::number(dnum));
+            Token newitem = Token(symbol, linePtr, QString::number(dnum));
+            output.append(newitem);
+        }else if(symbol == Symbol::INTSY){
+            //output.append(" "+tk+" "+ssymbol[symbol]+" "+QString::number(num));
+            Token newitem = Token(symbol, linePtr, QString::number(num));
+            output.append(newitem);
+        }else if(symbol == Symbol::NONESY){
+            //output.append(" "+tk+" "+ssymbol[symbol]+" "+"invalid-string!");
+            Token newitem = Token(symbol, linePtr, "invalid-string");
+            output.append(newitem);
         }else{
-            //std::cout<<ssymbol[symbol]<<std::endl;
-            output.append(" "+tk+" "+ssymbol[symbol]+" "+"null");
+            //output.append(" "+tk+" "+ssymbol[symbol]+" "+"null");
+            Token newitem = Token(symbol, linePtr, "null");
         }
     }
     //std::cout<<output.toStdString()<<std::endl;
@@ -46,7 +50,7 @@ bool lexany::getsym(){
         }
         retract();
         Symbol resultValue = reserver();
-        if(resultValue == NONESY) symbol = IDSY;
+        if(resultValue == Symbol::NONESY) symbol = Symbol::IDSY;
         else symbol = resultValue;
         return true;
         //else symbol=(Symbol)(resultValue-1);
@@ -65,62 +69,62 @@ bool lexany::getsym(){
             }
             retract();
             transNum();
-            symbol = DOUBLESY;
+            symbol = Symbol::DOUBLESY;
         }else if(isLetter()){
-            symbol = NONESY;
+            symbol = Symbol::NONESY;
             retract();
             return true;
         }else{
             retract();
             transNum();
-            symbol = INTSY;
+            symbol = Symbol::INTSY;
         }
     }
     else if(isColon()){ //judge := single : is invalid
         CatToken();
         if(!Getchar()) return false;
         if(isEqu()){
-            symbol = ASSIGNSY;
+            symbol = Symbol::ASSIGNSY;
             CatToken();
             return true;
         }
         else{
             retract();
-            symbol = NONESY;
+            symbol = Symbol::NONESY;
             return true;
         }
     }
     //below + - * ( ) , ; = < > <= >= <>
     else if(isPlus()){
-        symbol = PLUSSY;
+        symbol = Symbol::PLUSSY;
         CatToken();
     }
     else if(isMinus()){
-        symbol = MINUSSY;
+        symbol = Symbol::MINUSSY;
         CatToken();
     }
     else if(isStar()){
-        symbol = STARSY;
+        symbol = Symbol::STARSY;
         CatToken();
     }
     else if(isLpar()){
-        symbol = LPARSY;
+        symbol = Symbol::LPARSY;
         CatToken();
     }
     else if(isRpar()) {
-        symbol = RPARSY;
+        symbol = Symbol::RPARSY;
         CatToken();
     }
     else if(isComma()){
-        symbol = COMMASY;
+        symbol = Symbol::COMMASY;
         CatToken();
     }
     else if(isSemi()){
-        symbol = SEMISY;
+        symbol = Symbol::SEMISY;
         CatToken();
     }
     else if(isEqu()){
-        symbol = EQUSY;
+        symbol = Symbol::EQUSY;
         CatToken();
     }
     else if(isLess()){
@@ -128,14 +132,14 @@ bool lexany::getsym(){
         Getchar();
         if(isEqu()){
             CatToken();
-            symbol = LESSEQUALSY;
+            symbol = Symbol::LESSEQUALSY;
         }
         else if(isMore()){
             CatToken();
-            symbol = NOTEQUALSY;
+            symbol = Symbol::NOTEQUALSY;
         }
         else{
-            symbol = LESSSY;
+            symbol = Symbol::LESSSY;
             retract();
         }
     }
@@ -144,10 +148,10 @@ bool lexany::getsym(){
         if(!Getchar()) return false;
         if(isEqu()){
             CatToken();
-            symbol = MOREEQUALSY;
+            symbol = Symbol::MOREEQUALSY;
         }
         else{
-            symbol = MORESY;
+            symbol = Symbol::MORESY;
             retract();
         }
     }
@@ -165,12 +169,12 @@ bool lexany::getsym(){
         }
         else{ //当前/为除号
             retract();
-            symbol = DIVISY;
+            symbol = Symbol::DIVISY;
         }
     }
     else{
         CatToken();
-        symbol = NONESY;
+        symbol = Symbol::NONESY;
     }
     //print();
     return true;
@@ -196,7 +200,10 @@ bool lexany::isSpace() {
 }
 
 bool lexany::isNewline() {
-    return cur == '\n' || cur == '\r' ? true : false;
+    if(cur == '\n' || cur == '\r'){
+        linePtr++;
+        return true;
+    }return false;
 }
 
 bool lexany::isTab() {
@@ -276,25 +283,25 @@ bool lexany::retract() {
     return false;
 }
 
-lexany::Symbol lexany::reserver() {
-    if(!token.compare("begin")) return BEGINSY;
-    if(!token.compare("end")) return ENDSY;
-    if(!token.compare("if")) return IFSY;
-    if(!token.compare("then")) return THENSY;
-    if(!token.compare("else")) return ELSESY;
-    if(!token.compare("int")) return INTSY;
-    if(!token.compare("const")) return CONSTSY;
-    if(!token.compare("var")) return VARSY;
-    if(!token.compare("procedure")) return PROCEDURESY;
-    if(!token.compare("odd")) return ODDSY;
-    if(!token.compare("while")) return WHILESY;
-    if(!token.compare("do")) return DOSY;
-    if(!token.compare("call")) return CALLSY;
-    if(!token.compare("repeat")) return REPEATSY;
-    if(!token.compare("until")) return UNTILSY;
-    if(!token.compare("read")) return READSY;
-    if(!token.compare("write")) return WRITESY;
-    return NONESY;
+Symbol lexany::reserver() {
+    if(!token.compare("begin")) return Symbol::BEGINSY;
+    if(!token.compare("end")) return Symbol::ENDSY;
+    if(!token.compare("if")) return Symbol::IFSY;
+    if(!token.compare("then")) return Symbol::THENSY;
+    if(!token.compare("else")) return Symbol::ELSESY;
+    if(!token.compare("int")) return Symbol::INTSY;
+    if(!token.compare("const")) return Symbol::CONSTSY;
+    if(!token.compare("var")) return Symbol::VARSY;
+    if(!token.compare("procedure")) return Symbol::PROCEDURESY;
+    if(!token.compare("odd")) return Symbol::ODDSY;
+    if(!token.compare("while")) return Symbol::WHILESY;
+    if(!token.compare("do")) return Symbol::DOSY;
+    if(!token.compare("call")) return Symbol::CALLSY;
+    if(!token.compare("repeat")) return Symbol::REPEATSY;
+    if(!token.compare("until")) return Symbol::UNTILSY;
+    if(!token.compare("read")) return Symbol::READSY;
+    if(!token.compare("write")) return Symbol::WRITESY;
+    return Symbol::NONESY;
 }
 
 void lexany::transNum() {

@@ -28,12 +28,12 @@ void MainWindow::on_actionopen_file_triggered(){
     QTextStream out(&file);
     QString code = out.readAll();
     lexany analyzer(code);
-    QString output = analyzer.analyze();
-    QStringList qlist = output.split(" ");
+    QList<Token> output = analyzer.analyze();
+//    QStringList qlist = output.split(" ");
 
-    for(int i = 1; i < qlist.size(); i+=3){
-        addTreeitem(qlist.at(i), qlist.at(i+1), qlist.at(i+2));
-    }
+//    for(int i = 1; i < qlist.size(); i+=3){
+//        addTreeitem(qlist.at(i), qlist.at(i+1), qlist.at(i+2));
+//    }
 
 }
 

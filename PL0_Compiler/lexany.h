@@ -13,6 +13,8 @@
 #include <QTextStream>
 #include <QStack>
 #include <utility>
+#include <Symbol.h>
+#include <token.h>
 
 
 class lexany
@@ -28,16 +30,8 @@ private:
     QString token;
     int num;
     double dnum;
-    enum Symbol {NONESY, BEGINSY, ENDSY, IFSY,
-        THENSY, ELSESY, IDSY, INTSY, DOUBLESY,
-        PLUSSY, MINUSSY, STARSY, DIVISY,
-        LPARSY, RPARSY, COMMASY, SEMISY,
-        COLONSY, ASSIGNSY, EQUSY,
-        CONSTSY, VARSY, PROCEDURESY, ODDSY,
-        WHILESY, DOSY, CALLSY, REPEATSY,
-        UNTILSY, READSY, WRITESY,
-        LESSSY, MORESY,
-        LESSEQUALSY, MOREEQUALSY, NOTEQUALSY} symbol;
+    Symbol symbol;
+    int linePtr=1;
 
     QString ssymbol[36] = {"none","begin","end","if","then","else","identifer","int","double",
                              "plus","minus","star","divide","lpar","rpar","comma","semi",
@@ -72,7 +66,7 @@ private:
     bool getsym();
 
 public:
-    QString analyze();
+    QList<Token> analyze();
 
 };
 
