@@ -58,6 +58,7 @@ private:
     bool isRpar();
     bool isLess();
     bool isMore();
+    bool isDot();
     bool CatToken(); // strcat for cur and token
     bool retract();
     Symbol reserver();

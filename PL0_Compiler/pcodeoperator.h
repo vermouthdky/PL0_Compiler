@@ -4,7 +4,7 @@
 
 enum class PCodeOperator
 {
-    INT, CAL, LIT, LOD, STO, JMP, JPC, OPR
+    INT, CAL, LIT, LOD, STO, JMP, JPC, OPR, RED, WRT
 };
 
 #endif // PCODEOPERATOR_H

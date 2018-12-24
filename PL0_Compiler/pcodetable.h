@@ -15,6 +15,15 @@ public:
         PerPCode item = PerPCode(op,x,y);
         pCodeTable.append(item);
     }
+    void setX(int ptr, int value){
+        pCodeTable[ptr].setX(value);
+    }
+    void setY(int ptr, int value){
+        pCodeTable[ptr].setY(value);
+    }
+    void setOP(int ptr, PCodeOperator value){
+        pCodeTable[ptr].setOP(value);
+    }
 private:
     QList<PerPCode> pCodeTable;
 };

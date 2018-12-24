@@ -4,6 +4,8 @@
 #include<lexany.h>
 #include<pcodetable.h>
 #include<symtable.h>
+#include<exception>
+#include<readerrorexception.h>
 
 class Parser
 {
@@ -18,16 +20,10 @@ private:
     int tokenPtr = 0;
 
     int level = 0;
-    int address = 0;
+    int address = -1;
     const int addItem = 1;
 
 private:
-    void addErrorMessage(int kind, QString name);
-
-public:
-    Parser(QString input);
-    Parser();
-    bool GSAnalyse();
     void program();
     void block();
     void constDeclare();
@@ -54,6 +50,37 @@ public:
     void writeStatement();
     void letter();
     void number();
+    void addErrorMessage(int kind, QString token);
+    void nextPtr(){
+        if(tokenPtr<tokentable.size()-1){
+            tokenPtr++;
+        }else {
+            throw ReadErrorException();
+        }
+    }
+
+    int newAddress(){
+        return address++;
+    }
+    bool isStatementHeader();
+
+public:
+    Parser(QString input);
+    Parser();
+    bool GSAnalyse();
+    QStringList getErrorMessage(){
+        return errorMessage;
+    }
+    QList<Token> getTokenTable(){
+        return tokentable;
+    }
+    SymTable getSymTable(){
+        return symtable;
+    }
+    PCodeTable getPCodeTable(){
+        return pcodetable;
+    }
+
 };
 
 #endif // PARSER_H

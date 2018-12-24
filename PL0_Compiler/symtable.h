@@ -14,10 +14,10 @@ public:
     void enterProcess(QString name, int level, int address);
     bool thisLayerExisted(QString name, int level);
     bool preLayerExisted(QString name, int level);
-    PerSym getSymbol(QString name);
+    PerSym& getSymbol(QString name);
     int getLevelProc(int level);
 
-    QList<PerSym> getSymbolTable(){return symbolTable;}
+    QList<PerSym>& getSymbolTable(){return symbolTable;}
     void setPtr(int ptr){this->ptr = ptr;}
     int getPtr(){return ptr;}
     int getLength(){return symbolTable.size();}

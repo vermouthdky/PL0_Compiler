@@ -32,7 +32,9 @@ SOURCES += \
     symtable.cpp \
     pcodetable.cpp \
     perpcode.cpp \
-    token.cpp
+    token.cpp \
+    interpreter.cpp \
+    readerrorexception.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -44,7 +46,9 @@ HEADERS += \
     perpcode.h \
     pcodeoperator.h \
     Symbol.h \
-    token.h
+    token.h \
+    interpreter.h \
+    readerrorexception.h
 
 FORMS += \
         mainwindow.ui

@@ -30,6 +30,7 @@ QList<Token> lexany::analyze(){
         }else{
             //output.append(" "+tk+" "+ssymbol[symbol]+" "+"null");
             Token newitem = Token(symbol, linePtr, "null");
+            output.append(newitem);
         }
     }
     //std::cout<<output.toStdString()<<std::endl;
@@ -97,6 +98,10 @@ bool lexany::getsym(){
     //below + - * ( ) , ; = < > <= >= <>
     else if(isPlus()){
         symbol = Symbol::PLUSSY;
+        CatToken();
+    }
+    else if(isDot()){
+        symbol = Symbol::DOTSY;
         CatToken();
     }
     else if(isMinus()){
@@ -269,11 +274,15 @@ bool lexany::isLess(){
 bool lexany::isMore(){
     return cur == '>' ? true : false;
 }
-
+bool lexany::isDot(){
+    return cur == '.' ? true : false;
+}
 bool lexany::CatToken() {
     token.append(cur);
     return true;
 }
+
+
 
 bool lexany::retract() {
     if(strptr>0){

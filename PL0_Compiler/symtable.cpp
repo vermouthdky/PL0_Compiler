@@ -33,19 +33,18 @@ bool SymTable::thisLayerExisted(QString name, int level){
 // do have some problems for thislayerExisted and preLayerExited
 bool SymTable::preLayerExisted(QString name, int level){
     for(int i=0;i<symbolTable.size();i++){
-        if(!symbolTable[i].getName().compare(name) && symbolTable[i].getLevel()<level){
+        if(!symbolTable[i].getName().compare(name) && symbolTable[i].getLevel()<=level){
             return true;
         }
     }
     return false;
 }
-PerSym SymTable::getSymbol(QString name){
+PerSym& SymTable::getSymbol(QString name){
     for(int i=symbolTable.size()-1; i>=0;i--){
         if(!symbolTable[i].getName().compare(name)){
             return symbolTable[i];
         }
     }
-    return PerSym();
 }
 
 int SymTable::getLevelProc(int level){
@@ -56,3 +55,4 @@ int SymTable::getLevelProc(int level){
     }
     return -1;
 }
+

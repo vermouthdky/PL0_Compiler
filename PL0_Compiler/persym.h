@@ -7,7 +7,7 @@
 class PerSym
 {
 public:
-    PerSym();
+    PerSym(){};
     PerSym(int type, int value, int level, int address, int size, QString name){
         this->type = type;
         this->value = value;
