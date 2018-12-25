@@ -45,6 +45,7 @@ void MainWindow::on_compileButton_clicked()
     bool success = parser.GSAnalyse();
     if(success){
         ui->errorBrowser->clear();
+        ui->outputBrowser->clear();
         temtable = parser.getPCodeTable();
         QList<PerPCode> pcodetable = temtable.getPCodeTable();
         QTableWidget *ptableptr = ui->pcodeTablewiget;
@@ -63,6 +64,7 @@ void MainWindow::on_compileButton_clicked()
             ptableptr->setItem(i, 2, new QTableWidgetItem(QString::number(pcodetable[i].getY())));
         }
     }else{
+        ui->outputBrowser->clear();
         ui->pcodeTablewiget->clear();
         QStringList errorList = parser.getErrorMessage();
         ui->errorBrowser->setText(errorList.join("\n"));

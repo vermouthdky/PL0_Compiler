@@ -16,6 +16,7 @@ public:
     bool preLayerExisted(QString name, int level);
     PerSym& getSymbol(QString name);
     int getLevelProc(int level);
+    void clearLayer(int level);
 
     QList<PerSym>& getSymbolTable(){return symbolTable;}
     void setPtr(int ptr){this->ptr = ptr;}

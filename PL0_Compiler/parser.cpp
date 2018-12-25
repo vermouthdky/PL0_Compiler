@@ -174,6 +174,7 @@ void Parser::procDeclare(){
                 addErrorMessage(10, "");
             }
             block();
+            symtable.clearLayer(level);
             while(tokentable[tokenPtr].getSy() == Symbol::SEMISY || tokentable[tokenPtr].getSy() == Symbol::PROCEDURESY){
                 if(tokentable[tokenPtr].getSy() == Symbol::SEMISY){
                     nextPtr();
@@ -566,7 +567,7 @@ void Parser::addErrorMessage(int kind, QString name){
         erroritem = "line "+QString::number(tokentable[tokenPtr].getLine())+": "+"Incorrect symbol after procedure declaration.";
         break;
     case 7:
-        erroritem = "line "+QString::number(tokentable[tokenPtr].getLine())+": "+"Statement expected.";
+        erroritem = "line "+QString::number(tokentable[tokenPtr].getLine())+": "+"duplicated semicolon ; ";
         break;
     case 8:
         erroritem = "line "+QString::number(tokentable[tokenPtr].getLine())+": "+"Incorrect symbol after statement part in block.";

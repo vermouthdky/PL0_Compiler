@@ -47,6 +47,14 @@ PerSym& SymTable::getSymbol(QString name){
     }
 }
 
+void SymTable::clearLayer(int level){
+    for(int i=symbolTable.size()-1;i>=0;i--){
+        if(symbolTable[i].getLevel() == level){
+            symbolTable.removeAt(i);
+        }
+    }
+}
+
 int SymTable::getLevelProc(int level){
     for(int i=symbolTable.size()-1;i>=0;i--){
         if(symbolTable[i].getType()==proc && symbolTable[i].getLevel()==level){
